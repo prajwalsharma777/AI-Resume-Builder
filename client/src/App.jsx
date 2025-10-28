@@ -19,7 +19,7 @@ const App = () => {
         </Route>
 
         <Route path="view/:resumeId" element={<Preview />}></Route>
-        <Route path="view" element={<Login />}></Route>
+        <Route path="login" element={<Login />}></Route>
       </Routes>
     </>
   );
