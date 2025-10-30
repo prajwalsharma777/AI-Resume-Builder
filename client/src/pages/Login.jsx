@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import logo from "../assets/logo.svg";
+import { Link } from "react-router-dom";
 
 const Login = () => {
   const [state, setState] = useState("login");
@@ -23,9 +24,12 @@ const Login = () => {
 
   return (
     <div className="relative flex justify-center h-screen items-center">
-      {/* <Link to="/">
+      <Link
+        to="/"
+        className="absolute top-4 left-35 border border-black rounded-full pb-2 pr-4 pl-4"
+      >
         <img src={logo} alt="logo-image" className="h-11 w-auto" />
-      </Link> */}
+      </Link>
       <form
         onSubmit={handleSubmit}
         className="sm:w-[350px] w-full text-center border border-gray-300/60 rounded-2xl px-8 bg-white"
@@ -117,7 +121,7 @@ const Login = () => {
             required
           />
         </div>
-        <div className="mt-2 mb-2 text-center text-indigo-500">
+        <div className="mt-2 mb-2 text-center text-green-500">
           <button className="text-sm " type="reset">
             Forget password?
           </button>
@@ -125,9 +129,9 @@ const Login = () => {
 
         <button
           type="submit"
-          className="mt-2 w-full h-11 rounded-full text-white bg-indigo-500 hover:opacity-90 transition-opacity"
+          className="mt-2 w-full h-11 rounded-full text-white bg-green-500 hover:opacity-90 transition-opacity"
         >
-          Login
+          {state !== "login" ? "Sign Up" : "Login"}
         </button>
         <p className="text-gray-600 text-sm mt-3 mb-11">
           {state === "login"
@@ -138,7 +142,7 @@ const Login = () => {
               setState((prev) => (prev === "login" ? "register" : "login"))
             }
             href="#"
-            className="text-indigo-500 hover:underline"
+            className="text-green-500 hover:underline"
           >
             {" "}
             click here
