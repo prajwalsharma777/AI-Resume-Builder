@@ -31,17 +31,17 @@ const PersonalInfoForm = ({
               className="w-16 h-16 rounded-full object-cover mt-5 ring ring-slate-300 hover:opacity-80"
             />
           ) : (
-            <div className="inline-flex items-center gap-2 mt-5 text-slate-600 hover:text-slate-700 cursor-pointer">
+            <div className="relative inline-flex items-center gap-2 mt-5 text-slate-600 hover:text-slate-700 cursor-pointer">
               <User className="size-10 p-2.5 border rounded-full" />
-              Upload user image
+              <span>Upload user image</span>
+              <input
+                type="file"
+                accept="image/jpeg, image/png"
+                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                onChange={(e) => handleChange("image", e.target.files[0])}
+              />
             </div>
           )}
-          <input
-            type="file"
-            accept="image/jpeg, image/png"
-            className="hidden"
-            onChange={(e) => handleChange("image", e.target.files[0])}
-          />
         </label>
         {typeof data.image === "object" && (
           <div className="flex flex-col gap-1 pl-4 text-sm">
