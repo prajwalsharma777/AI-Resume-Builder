@@ -22,7 +22,7 @@ const TemplateSelector = ({ selectedTemplate, onChange }) => {
       preview: "Minimal desgin with a single image and clean typography",
     },
     {
-      id: "minial",
+      id: "minimal",
       name: "Minimal",
       preview: "Ultra-clean design that puts your content front and center",
     },
