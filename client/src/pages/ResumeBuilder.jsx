@@ -15,6 +15,7 @@ import {
 import PersonalInfoForm from "../components/PersonalInfoForm";
 import ResumePreview from "../components/Home/ResumePreview";
 import TemplateSelector from "../components/TemplateSelector";
+import ColorWheel from "../components/Home/ColorWheel";
 
 const ResumeBuilder = () => {
   const { resumeId } = useParams();
@@ -23,7 +24,7 @@ const ResumeBuilder = () => {
     _id: "",
     title: "",
     personal_info: {},
-    professional_summar: "",
+    professional_summary: "",
     experience: [],
     education: [],
     project: [],
@@ -86,11 +87,20 @@ const ResumeBuilder = () => {
               />
               {/* -------- Section Navigation ------------  */}
               <div className="flex justify-between items-center mb-6 border-b border-gray-300 py-1">
-                <div className="flex justify-between items-center mb-6 border-b broder-gray-300 py-1">
+                <div className="flex items-center gap-2">
                   <TemplateSelector
                     selectedTemplate={resumeData.template}
                     onChange={(template) =>
                       setResumeData((prev) => ({ ...prev, template }))
+                    }
+                  />
+                  <ColorWheel
+                    selectedColor={resumeData.accent_color}
+                    onChange={(color) =>
+                      setResumeData((prev) => ({
+                        ...prev,
+                        accent_color: color,
+                      }))
                     }
                   />
                 </div>
