@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { useParams, Link, data } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { dummyResumeData } from "../assets/assets";
 import {
   ArrowLeftIcon,
   Briefcase,
   ChevronLeft,
   ChevronRight,
+  Download,
   FileText,
   FolderIcon,
   GraduationCap,
@@ -20,6 +21,7 @@ import ProfessionalSummary from "../components/ProfessionalSummary";
 import ExperienceForm from "../components/ExperienceForm";
 import EducationForm from "../components/EducationForm";
 import ProjectForm from "../components/ProjectForm";
+import SKillsForm from "../components/SkillsForm";
 
 const ResumeBuilder = () => {
   const { resumeId } = useParams();
@@ -60,6 +62,9 @@ const ResumeBuilder = () => {
   useEffect(() => {
     loadExistingResume();
   });
+  const downloader = () => {
+    window.print();
+  };
 
   return (
     <div>
@@ -189,12 +194,34 @@ const ResumeBuilder = () => {
                     }
                   />
                 )}
+                {activeSection.id === "skill" && (
+                  <SKillsForm
+                    data={resumeData.skills}
+                    onChange={(data) =>
+                      setResumeData((prev) => ({ ...prev, skills: data }))
+                    }
+                  />
+                )}
               </div>
+              <button className="bg-gradient-to-br from-green-100 to-green-200 ring-green-300 text-green-600 ring hover:ring-green-400 transition-all rounded-md px-6 py-2 mt-6 text-sm">
+                Save Changes
+              </button>
             </div>
           </div>
           {/* Right Panel - Preview Page */}
           <div className="lg:col-span-7 max-lg:mt-6">
-            <div>{/* ==== BUTTONS ==== */}</div>
+            <div className="relative w-full">
+              {/* ==== BUTTONS ==== */}
+              <div className="absolute bottom-3 left-0 right-0 flex items-center justify-end gap-2">
+                <button
+                  onClick={downloader}
+                  className="flex items-center gap-2 px-6 py-2 text-xs bg-gradient-to-br from-purple-100 to-purple-200 text-purple-600 rounded-lg ring-purple-300 ring hover:ring-purple-500 transition-colors"
+                >
+                  <Download className="size-4" />
+                  Download
+                </button>
+              </div>
+            </div>
             {/* === Resume Preview ===*/}
             <ResumePreview
               data={resumeData}
