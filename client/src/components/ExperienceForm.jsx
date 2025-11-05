@@ -68,7 +68,7 @@ const ExperienceForm = ({ data, onChange }) => {
                   }
                   type="text"
                   placeholder="Company Name"
-                  className="ps-3 pt-2 text-sm rounded-lg"
+                  className="ps-3 py-2 text-sm rounded-lg"
                 />
                 <input
                   value={experience.position || ""}
@@ -77,7 +77,7 @@ const ExperienceForm = ({ data, onChange }) => {
                   }
                   type="text"
                   placeholder="Job Title"
-                  className="ps-3 pt-2 text-sm rounded-lg"
+                  className="ps-3 py-2 text-sm rounded-lg"
                 />
                 <input
                   value={experience.start_date || ""}
@@ -85,7 +85,7 @@ const ExperienceForm = ({ data, onChange }) => {
                     updateExperience(index, "start_date", e.target.value)
                   }
                   type="month"
-                  className="ps-3 pt-2 text-sm rounded-lg"
+                  className="ps-3 py-2 text-sm rounded-lg"
                 />
                 <input
                   value={experience.end_date || ""}
@@ -94,7 +94,7 @@ const ExperienceForm = ({ data, onChange }) => {
                   }
                   type="month"
                   disabled={experience.is_current}
-                  className="ps-3 pt-2 text-sm rounded-lg disabled:bg-gray-100"
+                  className="ps-3 py-2 text-sm rounded-lg disabled:bg-gray-100"
                 />
               </div>
               <label className="flex items-center gap-2">

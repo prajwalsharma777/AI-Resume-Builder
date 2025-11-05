@@ -67,7 +67,7 @@ const EducationForm = ({ data, onChange }) => {
                   }
                   type="text"
                   placeholder="Institution Name"
-                  className="ps-3 pt-2 text-sm"
+                  className="ps-3 py-2 text-sm"
                   required
                 />
                 <input
@@ -77,7 +77,7 @@ const EducationForm = ({ data, onChange }) => {
                   }
                   type="text"
                   placeholder="Degree Name"
-                  className="ps-3 pt-2 text-sm"
+                  className="ps-3 py-2 text-sm"
                   required
                 />
                 <input
@@ -86,7 +86,7 @@ const EducationForm = ({ data, onChange }) => {
                     updateEducation(index, "field", e.target.value)
                   }
                   type="text"
-                  className="ps-3 pt-2 text-sm"
+                  className="ps-3 py-2 text-sm"
                   placeholder="Field of Study"
                   required
                 />
@@ -96,7 +96,7 @@ const EducationForm = ({ data, onChange }) => {
                     updateEducation(index, "gpa", e.target.value)
                   }
                   type="number"
-                  className="ps-3 pt-2 text-sm"
+                  className="ps-3 py-2 text-sm"
                   placeholder="CGPA"
                   min="0"
                   max="10"
@@ -110,7 +110,7 @@ const EducationForm = ({ data, onChange }) => {
                     updateEducation(index, "graduation_date", e.target.value)
                   }
                   type="month"
-                  className="ps-3 pt-2 text-sm"
+                  className="ps-3 py-2 text-sm"
                   required
                 />
               </div>
