@@ -4,7 +4,7 @@ const connectDB = async () => {
   try {
     // Mongoose connection keyword -> connected, disconnected, error
     mongoose.connection.on("connected", () => {
-      console.log("Database Conncted Successfully");
+      console.log("Database Connected");
     });
 
     let mongodbURI = process.env.MONGODB_URI;

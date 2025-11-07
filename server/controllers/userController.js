@@ -1,4 +1,5 @@
 import User from "../models/Users.js";
+import Resume from "../models/Resume.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
@@ -26,7 +27,7 @@ export const registerUser = async (req, res) => {
     if (user) {
       return res.status(400).json({ message: "User already Exists" });
     }
-    // create new user (chechked all other blockage)
+    // create new user (checked all other blockage)
     // 1. ---Password encrypt
     const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = await User.create({
@@ -91,5 +92,17 @@ export const getUserById = async (req, res) => {
     return res.status(200).json({ user });
   } catch (error) {
     return res.status(400).json({ message: "Login Error: \n" + error.message });
+  }
+};
+
+export const getUserResumes = async (req, res) => {
+  try {
+    // we will get userId by middleware "Protect"
+    const userId = req.userId;
+
+    const resumes = await Resume.find({ userId });
+    return res.status(200).json({ resumes });
+  } catch (error) {
+    return res.status(404).json({ message: error.message });
   }
 };

@@ -17,7 +17,7 @@ app.use(cors());
 app.get("/", (req, res) => res.send("Server is Live"));
 
 app.use("/api/users", userRouter);
-app.use("/api/users", resumeRouter);
+app.use("/api/resumes", resumeRouter);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
