@@ -29,7 +29,8 @@ dist-ssr/
 *.sln
 *.sw?
 
-# Environment files
-.env
-*.env
+# Environment variables
+# Ignore all .env files and .env.local, .env.production, etc.
+# in all directories.
 **/.env
+**/.env.*

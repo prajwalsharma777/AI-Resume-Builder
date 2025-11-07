@@ -24,6 +24,6 @@ UserSchema.methods.comparePassword = function (password) {
   return bcrypt.compareSync(password, this.password);
   // this.password -> passowrd stored in database...
 };
-
+// Model
 const User = mongoose.model("User", UserSchema);
 export default User;
