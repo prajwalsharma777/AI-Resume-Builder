@@ -1,9 +1,16 @@
 import React, { useState } from "react";
 import logo from "../assets/logo.svg";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
+import api from "../configs/api";
+import { useDispatch } from "react-redux";
+import { login } from "../app/features/authSlice";
+import toast from "react-hot-toast";
 
 const Login = () => {
-  const [state, setState] = useState("login");
+  // const [state, setState] = useState("login");
+  const dispatch = useDispatch();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const state = searchParams.get("state") || "login";
 
   const [formData, setFormData] = useState({
     name: "",
@@ -20,7 +27,17 @@ const Login = () => {
   const handleSubmit = async (e) => {
     // console.log(e);
     e.preventDefault();
+    try {
+      const { data } = await api.post(`/api/users/${state}`, formData);
+      dispatch(login(data));
+      localStorage.setItem("token", data.token);
+      toast.success(data.message);
+    } catch (error) {
+      toast(error?.response?.data?.message || error.message);
+    }
   };
+
+  console.log("getting state", state);
 
   return (
     <div className="relative flex justify-center h-screen items-center">
@@ -138,10 +155,13 @@ const Login = () => {
             ? "Don't have an account?"
             : "Already have an account? "}
           <a
-            onClick={() =>
-              setState((prev) => (prev === "login" ? "register" : "login"))
-            }
-            href="#"
+            onClick={() => {
+              if (state === "login") {
+                setSearchParams({ state: "register" });
+              } else {
+                setSearchParams({ state: "login" });
+              }
+            }}
             className="text-green-500 hover:underline"
           >
             {" "}
