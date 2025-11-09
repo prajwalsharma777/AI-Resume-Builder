@@ -99,7 +99,7 @@ const EducationForm = ({ data, onChange }) => {
                   className="ps-3 py-2 text-sm"
                   placeholder="CGPA"
                   min="0"
-                  max="10"
+                  max="100"
                   step="0.1"
                   required
                 />

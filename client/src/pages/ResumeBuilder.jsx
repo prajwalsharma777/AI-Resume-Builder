@@ -22,9 +22,14 @@ import ExperienceForm from "../components/ExperienceForm";
 import EducationForm from "../components/EducationForm";
 import ProjectForm from "../components/ProjectForm";
 import SKillsForm from "../components/SkillsForm";
+import api from "../configs/api";
+import toast from "react-hot-toast";
+
+import { useSelector } from "react-redux";
 
 const ResumeBuilder = () => {
   const { resumeId } = useParams();
+  const { user, token } = useSelector((state) => state.auth);
 
   const [resumeData, setResumeData] = useState({
     _id: "",
@@ -33,17 +38,23 @@ const ResumeBuilder = () => {
     professional_summary: "",
     experience: [],
     education: [],
-    project: [],
+    projects: [],
     skills: [],
     template: "classic",
     accent_color: "#3B82F6",
     public: false,
   });
   const loadExistingResume = async () => {
-    const resume = dummyResumeData.find((resume) => resume._id === resumeId);
-    if (resume) {
-      setResumeData(resume);
-      document.title = resume.title;
+    try {
+      const { data } = await api.get("/api/resumes/get/" + resumeId, {
+        headers: { Authorization: token },
+      });
+      if (data.resume) {
+        setResumeData(data.resume);
+        document.title = data.resume.title;
+      }
+    } catch (error) {
+      console.log(error.message);
     }
   };
   const sections = [
@@ -51,7 +62,7 @@ const ResumeBuilder = () => {
     { id: "summary", name: "Summary", icon: FileText },
     { id: "experience", name: "Experience", icon: Briefcase },
     { id: "education", name: "Education", icon: GraduationCap },
-    { id: "project", name: "Project", icon: FolderIcon },
+    { id: "project", name: "Projects", icon: FolderIcon },
     { id: "skill", name: "Skill", icon: Sparkles },
   ];
   const [activeSectionIndex, setActiveSectionIndex] = useState(0);
@@ -61,9 +72,33 @@ const ResumeBuilder = () => {
 
   useEffect(() => {
     loadExistingResume();
-  });
+  }, []);
+
   const downloader = () => {
     window.print();
+  };
+  const saveChanges = async () => {
+    try {
+      let updatedResumeData = structuredClone(resumeData);
+      // remove image from updatedResumeData
+      if (typeof resumeData.personal_info.image === "object") {
+        delete updatedResumeData.personal_info.image;
+      }
+      const formData = new FormData();
+      formData.append("resumeId", resumeId);
+      formData.append("resumeData", JSON.stringify(updatedResumeData));
+      removeBackground && formData.append("removeBackground", "yes");
+      typeof resumeData.personal_info.image === "object" &&
+        formData.append("image", resumeData.personal_info.image);
+
+      const { data } = await api.put("/api/resumes/update", formData, {
+        headers: { Authorization: token },
+      });
+      setResumeData(data.resume);
+      toast.success(data.message);
+    } catch (error) {
+      console.error("Error saving resume:", error);
+    }
   };
 
   return (
@@ -98,13 +133,13 @@ const ResumeBuilder = () => {
               <div className="flex justify-between items-center mb-6 border-b border-gray-300 py-1">
                 <div className="flex items-center gap-2">
                   <TemplateSelector
-                    selectedTemplate={resumeData.template}
+                    selectedTemplate={resumeData?.template}
                     onChange={(template) =>
                       setResumeData((prev) => ({ ...prev, template }))
                     }
                   />
                   <ColorWheel
-                    selectedColor={resumeData.accent_color}
+                    selectedColor={resumeData?.accent_color}
                     onChange={(color) =>
                       setResumeData((prev) => ({
                         ...prev,
@@ -146,7 +181,7 @@ const ResumeBuilder = () => {
               <div className="space-y-6">
                 {activeSection.id === "personal" && (
                   <PersonalInfoForm
-                    data={resumeData.personal_info}
+                    data={resumeData?.personal_info}
                     onChange={(data) =>
                       setResumeData((prev) => ({
                         ...prev,
@@ -172,7 +207,7 @@ const ResumeBuilder = () => {
                 )}
                 {activeSection.id === "experience" && (
                   <ExperienceForm
-                    data={resumeData.experience}
+                    data={resumeData?.experience}
                     onChange={(data) =>
                       setResumeData((prev) => ({ ...prev, experience: data }))
                     }
@@ -180,7 +215,7 @@ const ResumeBuilder = () => {
                 )}
                 {activeSection.id === "education" && (
                   <EducationForm
-                    data={resumeData.education}
+                    data={resumeData?.education}
                     onChange={(data) =>
                       setResumeData((prev) => ({ ...prev, education: data }))
                     }
@@ -188,22 +223,30 @@ const ResumeBuilder = () => {
                 )}
                 {activeSection.id === "project" && (
                   <ProjectForm
-                    data={resumeData.project}
+                    data={resumeData?.projects}
                     onChange={(data) =>
-                      setResumeData((prev) => ({ ...prev, project: data }))
+                      setResumeData((prev) => ({ ...prev, projects: data }))
                     }
                   />
                 )}
                 {activeSection.id === "skill" && (
                   <SKillsForm
-                    data={resumeData.skills}
+                    data={resumeData?.skills}
                     onChange={(data) =>
                       setResumeData((prev) => ({ ...prev, skills: data }))
                     }
                   />
                 )}
               </div>
-              <button className="bg-gradient-to-br from-green-100 to-green-200 ring-green-300 text-green-600 ring hover:ring-green-400 transition-all rounded-md px-6 py-2 mt-6 text-sm">
+              <button
+                onClick={() => {
+                  toast.promise(saveChanges, {
+                    loading: "Loading",
+                    error: "Error when fetching",
+                  });
+                }}
+                className="bg-gradient-to-br from-green-100 to-green-200 ring-green-300 text-green-600 ring hover:ring-green-400 transition-all rounded-md px-6 py-2 mt-6 text-sm"
+              >
                 Save Changes
               </button>
             </div>
@@ -225,8 +268,8 @@ const ResumeBuilder = () => {
             {/* === Resume Preview ===*/}
             <ResumePreview
               data={resumeData}
-              template={resumeData.template}
-              accentColor={resumeData.accent_color}
+              template={resumeData?.template}
+              accentColor={resumeData?.accent_color}
             />
           </div>
         </div>

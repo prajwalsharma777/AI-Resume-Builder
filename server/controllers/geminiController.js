@@ -75,7 +75,7 @@ export const uploadResume = async (req, res) => {
 
     const systemPrompt =
       "You are an expert AI agent to extract data from resume.";
-    const userPrompt = `extract data from this resume: ${resumeText} 
+    const userPrompt = `extract data from this resume: ${resumeText}. If (professional_summary) field is missing or undefined then fill them too which is most suitable fo it.
     Provide data in the following JSON format with no additional text before or after:
       professional_summary: {
         type: String,

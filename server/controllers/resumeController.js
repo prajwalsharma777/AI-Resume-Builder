@@ -14,7 +14,7 @@ export const createResume = async (req, res) => {
     const newResume = await Resume.create({ userId, title });
     return res
       .status(200)
-      .json({ message: "Resume Created.", resume: newResume });
+      .json({ message: "Resume Created", resume: newResume });
   } catch (error) {
     return res.status(400).json({ message: error.message });
   }
@@ -28,7 +28,7 @@ export const deleteResume = async (req, res) => {
     const { resumeId } = req.params;
 
     await Resume.findOneAndDelete({ userId, _id: resumeId });
-    res.status(200).json({ message: "Resume deleted." });
+    res.status(200).json({ message: "Resume deleted" });
   } catch (error) {
     return res.status(400).json({ message: error.message });
   }
@@ -49,7 +49,7 @@ export const getResumeById = async (req, res) => {
     getResume.createdAt = undefined;
     getResume.updatedAt = undefined;
 
-    res.status(200).json({ getResume });
+    res.status(200).json({ resume: getResume });
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
@@ -64,8 +64,12 @@ export const updateResume = async (req, res) => {
     // if removeBackground is True--> we will use *multer*. using middleware
     const image = req.file;
 
-    let resumeDataCopy = JSON.parse(resumeData);
-
+    let resumeDataCopy = JSON.parse(JSON.stringify(resumeData));
+    if (typeof resumeData === "string") {
+      resumeDataCopy = await JSON.parse(resumeData);
+    } else {
+      resumeDataCopy = structuredClone(resumeData);
+    }
     if (image) {
       const imageBufferData = fs.createReadStream(image.path);
 
@@ -87,7 +91,7 @@ export const updateResume = async (req, res) => {
       resumeDataCopy,
       { new: true }
     );
-    return res.status(200).json({ message: "Changes Saved" });
+    return res.status(200).json({ message: "Changes Saved", resume });
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
