@@ -40,6 +40,9 @@ export const getResumeById = async (req, res) => {
   try {
     const userId = req.userId;
     const { resumeId } = req.params;
+    if (!resumeId || !resumeId.match(/^[0-9a-fA-F]{24}$/)) {
+      return res.status(400).json({ message: "Invalid Resume ID" });
+    }
 
     const getResume = await Resume.findOne({ userId, _id: resumeId });
     if (!getResume) {

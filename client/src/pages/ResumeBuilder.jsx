@@ -52,9 +52,12 @@ const ResumeBuilder = () => {
       if (data.resume) {
         setResumeData(data.resume);
         document.title = data.resume.title;
+      } else {
+        window.location.href = "/view/" + resumeId;
       }
     } catch (error) {
       console.log(error.message);
+      window.location.href = "/view/" + resumeId;
     }
   };
   const sections = [
